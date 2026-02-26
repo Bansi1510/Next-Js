@@ -15,6 +15,8 @@ if (!catched) {
 
 const connectDB = async () => {
   if (catched.con) {
+    console.log("catched database connected");
+
     return catched.con;
   }
   if (!catched.promise) {
@@ -22,6 +24,7 @@ const connectDB = async () => {
   }
   try {
     catched.con = await catched.promise;
+    console.log("database connected")
   } catch (error) {
     throw error;
   }
