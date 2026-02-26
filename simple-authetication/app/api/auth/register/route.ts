@@ -3,7 +3,7 @@ import User from "@/app/models/user.model";
 import bcrypt from "bcryptjs";
 import { NextRequest, NextResponse } from "next/server";
 
-export const POST = async (req: NextRequest,) => {
+export const POST = async (req: NextRequest) => {
   try {
     const { name, email, password } = await req.json();
     await connectDB();
@@ -37,7 +37,7 @@ export const POST = async (req: NextRequest,) => {
     )
 
   } catch (error) {
-    NextResponse.json(
+    return NextResponse.json(
       { message: "Internal Server Error", success: false, error }
     )
   }
