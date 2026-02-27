@@ -11,7 +11,7 @@ const authOptions: NextAuthOptions = {
         email: { label: "Email", type: "text" },
         password: { label: "Password", type: "password" }
       },
-      async authorize(credentials, req) {
+      async authorize(credentials) {
         const email = credentials?.email;
         const password = credentials?.password;
         if (!email || !password) {
@@ -26,19 +26,45 @@ const authOptions: NextAuthOptions = {
         if (!isMatch) {
           throw new Error("Password is wrong");
         }
+
+        return {
+          id: user._id,
+          name: user.name,
+          email: user.email,
+          image: user.image
+        }
       },
     })
   ],
   callbacks: {
-
+    async jwt({ token, user }) {
+      if (user) {
+        token.id = user.id;
+        token.name = user.name;
+        token.email = user.email;
+        token.image = user.image;
+      }
+      return token;
+    },
+    session({ session, token }) {
+      if (session.user) {
+        session.user.id = token.id as string
+        session.user.email = token.email;
+        session.user.name = token.name;
+        session.user.image = token.image as string;
+      }
+      return session;
+    }
   },
   session: {
-
+    strategy: 'jwt',
+    maxAge: 7 * 24 * 60 * 60 * 1000
   },
   pages: {
-
+    signIn: "/login",
+    error: "/login"
   },
-  secret: "bansiparmar"
+  secret: process.env.NEXT_AUTH_SECRETE
 }
 
 export default authOptions;
