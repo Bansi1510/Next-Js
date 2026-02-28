@@ -7,7 +7,6 @@ export const POST = async (req: NextRequest) => {
   try {
     const { name, email, password } = await req.json();
     await connectDB();
-
     if (!name || !email || !password) {
       return NextResponse.json(
         { message: "Required all fields", success: false },
@@ -15,7 +14,7 @@ export const POST = async (req: NextRequest) => {
       )
     }
     const existingUser = await User.find({ email })
-    if (existingUser) {
+    if (existingUser.length > 0) {
       return NextResponse.json(
         { message: "user already exsist", success: false },
         { status: 400 }

@@ -1,7 +1,9 @@
 "use client";
 
+import axios from "axios";
 import Link from "next/link";
 import { useState } from "react";
+import { FcGoogle } from "react-icons/fc";
 
 const RegisterPage = () => {
   const [formData, setFormData] = useState({
@@ -17,9 +19,19 @@ const RegisterPage = () => {
     });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     console.log(formData);
+    try {
+      const res = await axios.post("/api/auth/register", formData)
+      console.log(res)
+    } catch (error) {
+      console.log(error)
+    }
+  };
+
+  const handleGoogleSignUp = () => {
+    console.log("Google Sign Up Clicked");
   };
 
   return (
@@ -88,6 +100,22 @@ const RegisterPage = () => {
             Register
           </button>
         </form>
+
+        {/* Divider */}
+        <div className="flex items-center my-6">
+          <div className="flex-1 h-px bg-gray-300"></div>
+          <span className="px-3 text-sm text-gray-500">OR</span>
+          <div className="flex-1 h-px bg-gray-300"></div>
+        </div>
+
+        {/* Google Sign Up */}
+        <button
+          onClick={handleGoogleSignUp}
+          className="w-full flex items-center justify-center gap-2 border py-2 rounded-lg hover:bg-gray-50 transition"
+        >
+          <FcGoogle />
+          Sign up with Google
+        </button>
 
         {/* Login Link */}
         <p className="text-center text-sm mt-6">
