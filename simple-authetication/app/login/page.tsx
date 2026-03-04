@@ -2,6 +2,7 @@
 
 import { signIn, useSession } from "next-auth/react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { FcGoogle } from "react-icons/fc";
 
@@ -11,6 +12,7 @@ const Login = () => {
     email: "",
     password: ""
   });
+  const router = useRouter();
   const session = useSession();
   console.log(session?.data?.user);
   const handleOnChanged = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -24,6 +26,7 @@ const Login = () => {
     try {
       const res = await signIn('credentials', { email: formData.email, password: formData.password, redirect: false });
       console.log(res)
+      router.push("/")
     } catch (error) {
       console.log(error)
     }
@@ -85,7 +88,17 @@ const Login = () => {
         </div>
 
         {/* Google Login */}
-        <button className="w-full flex items-center justify-center gap-2 border py-2 rounded-lg hover:bg-gray-50 transition">
+        <button
+          className="w-full flex items-center justify-center gap-2 border py-2 rounded-lg hover:bg-gray-50 transition"
+
+          onClick={async () => {
+            await signIn('google', {
+              callbackUrl: "/"
+            });
+
+          }
+          }
+        >
           <FcGoogle />
           Continue with Google
         </button>

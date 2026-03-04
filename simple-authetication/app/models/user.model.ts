@@ -2,12 +2,12 @@
 import mongoose from "mongoose";
 
 
-interface IUser {
+export interface IUser {
   _id?: mongoose.Types.ObjectId;
   name?: string;
   image?: string;
   email: string;
-  password: string;
+  password?: string;
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -25,7 +25,7 @@ const userSchema = new mongoose.Schema<IUser>({
   },
   password: {
     type: String,
-    required: true
+    required: false
   }
 
 }, { timestamps: true })
