@@ -1,7 +1,9 @@
 "use client";
 
 import axios from "axios";
+import { signIn } from "next-auth/react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { FcGoogle } from "react-icons/fc";
 
@@ -11,7 +13,7 @@ const RegisterPage = () => {
     email: "",
     password: "",
   });
-
+  const router = useRouter();
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
       ...formData,
@@ -25,14 +27,13 @@ const RegisterPage = () => {
     try {
       const res = await axios.post("/api/auth/register", formData)
       console.log(res)
+      router.push("/login")
     } catch (error) {
       console.log(error)
     }
   };
 
-  const handleGoogleSignUp = () => {
-    console.log("Google Sign Up Clicked");
-  };
+
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
@@ -110,7 +111,10 @@ const RegisterPage = () => {
 
         {/* Google Sign Up */}
         <button
-          onClick={handleGoogleSignUp}
+          onClick={async () => {
+            await signIn('google', { callbackUrl: "/" });
+            router.push("/")
+          }}
           className="w-full flex items-center justify-center gap-2 border py-2 rounded-lg hover:bg-gray-50 transition"
         >
           <FcGoogle />
