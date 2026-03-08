@@ -2,14 +2,24 @@
 
 import { useSession } from "next-auth/react";
 import Image from "next/image";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 const Page = () => {
   const { data } = useSession();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const [name, setName] = useState(() => data?.user?.name || "");
-  const [image, setImage] = useState(() => data?.user?.image || "");
+  const [name, setName] = useState("");
+  const [image, setImage] = useState("");
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (data?.user) {
+        setName(data.user.name || "");
+        setImage(data.user.image || "");
+      }
+    }
+    fetchData();
+  }, [data?.user]);
 
   const handleImageClick = () => {
     fileInputRef.current?.click();
@@ -26,7 +36,7 @@ const Page = () => {
   const handleUpdate = () => {
     console.log("Updated Name:", name);
     console.log("Updated Image:", image);
-
+    // Call API here
   };
 
   return (
