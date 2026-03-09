@@ -2,11 +2,13 @@
 
 import { useSession, signOut } from "next-auth/react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import React from "react";
 import { FaEdit } from "react-icons/fa";
 
 const Page = () => {
   const { data } = useSession();
+  const router = useRouter();
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
@@ -15,7 +17,10 @@ const Page = () => {
         <div className="relative w-full max-w-md bg-white shadow-2xl rounded-2xl p-10 text-center">
 
           {/* Pencil Icon */}
-          <button className="absolute top-5 right-5 p-2 rounded-full hover:bg-gray-100 transition duration-200">
+          <button
+            className="absolute top-5 right-5 p-2 rounded-full hover:bg-gray-100 transition duration-200"
+            onClick={() => router.push("/edit")}
+          >
             <FaEdit className="text-gray-600 hover:text-gray-800 text-lg" />
           </button>
 

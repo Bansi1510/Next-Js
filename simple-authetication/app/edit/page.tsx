@@ -1,16 +1,18 @@
 "use client";
 
+import axios from "axios";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import React, { useEffect, useRef, useState } from "react";
 
 const Page = () => {
   const { data } = useSession();
+
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const [name, setName] = useState("");
   const [image, setImage] = useState("");
-
+  const [file, setFile] = useState<File | null>(null);
   useEffect(() => {
     const fetchData = async () => {
       if (data?.user) {
@@ -26,17 +28,32 @@ const Page = () => {
   };
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      const previewUrl = URL.createObjectURL(file);
+    const selectedFile = e.target.files?.[0];
+
+    if (selectedFile) {
+      setFile(selectedFile);
+
+      const previewUrl = URL.createObjectURL(selectedFile);
       setImage(previewUrl);
     }
   };
 
-  const handleUpdate = () => {
-    console.log("Updated Name:", name);
-    console.log("Updated Image:", image);
-    // Call API here
+  const handleUpdate = async () => {
+    try {
+      const formData = new FormData();
+
+      formData.append("name", name);
+
+      if (file) {
+        formData.append("file", file);
+      }
+
+      const res = await axios.post("/api/edit", formData);
+
+      console.log("Updated:", res.data);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -44,7 +61,7 @@ const Page = () => {
       {data?.user ? (
         <div className="w-full max-w-md bg-white shadow-2xl rounded-2xl p-10 text-center">
 
-          {/* Clickable Image */}
+          {/* Image */}
           <div className="flex justify-center">
             <div
               className="relative w-32 h-32 cursor-pointer group"
@@ -59,7 +76,7 @@ const Page = () => {
                 />
               )}
 
-              {/* Overlay Text */}
+              {/* Hover overlay */}
               <div className="absolute inset-0 flex items-center justify-center bg-black/40 rounded-full opacity-0 group-hover:opacity-100 transition text-white text-sm font-medium">
                 Change
               </div>
@@ -75,7 +92,7 @@ const Page = () => {
             className="hidden"
           />
 
-          {/* Editable Name */}
+          {/* Name Input */}
           <input
             type="text"
             value={name}
