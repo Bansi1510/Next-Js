@@ -12,6 +12,7 @@ const uploadImage = async (file: Blob | null): Promise<string | null> => {
     return null
   }
   try {
+    console.log("hello", file)
     const arrayBuffer = await file.arrayBuffer();
     const buffer = Buffer.from(arrayBuffer);
     return new Promise((resolve, reject) => {

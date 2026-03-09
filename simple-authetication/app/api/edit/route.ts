@@ -1,3 +1,4 @@
+import authOptions from "@/app/lib/auth";
 import uploadImage from "@/app/lib/cloudinary";
 import connectDB from "@/app/lib/db"
 import User from "@/app/models/user.model";
@@ -7,7 +8,7 @@ import { NextRequest, NextResponse } from "next/server";
 export const POST = async (req: NextRequest) => {
   try {
     await connectDB();
-    const session = await getServerSession();
+    const session = await getServerSession(authOptions);
     if (!session || !session.user.id || !session.user.email) {
       return NextResponse.json(
         { message: "User not found" },
@@ -18,8 +19,11 @@ export const POST = async (req: NextRequest) => {
     const name = formData.get("name") as string;
     const file = formData.get("file") as Blob | null;
 
-    let imageUrl = session.user.image ?? null
+    let imageUrl = session.user.image ?? null;
+
+    console.log(file);
     if (file) {
+      console.log("hello name", file)
       imageUrl = await uploadImage(file);
     }
     const user = await User.findByIdAndUpdate(session.user.id, {
