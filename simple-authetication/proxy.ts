@@ -10,7 +10,6 @@ export const proxy = async (req: NextRequest) => {
     "favicon.ico",
     "_next"
   ]
-  console.log("hello")
   if (publicRoute.some(path => pathname.startsWith(path))) {
     return NextResponse.next()
   } else {

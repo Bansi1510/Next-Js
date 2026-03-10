@@ -25,7 +25,7 @@ export const GET = async () => {
     }
 
     return NextResponse.json(
-      user, { status: 200 }
+      { user }, { status: 200 }
     )
 
   } catch (error) {

@@ -1,15 +1,16 @@
 "use client";
 
-import { useSession, signOut } from "next-auth/react";
+import { userContextData } from "@/context/UserContext";
+import { signOut } from "next-auth/react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import React from "react";
+import React, { useContext } from "react";
 import { FaEdit } from "react-icons/fa";
 
 const Page = () => {
-  const { data } = useSession();
+  const data = useContext(userContextData)
   const router = useRouter();
-
+  console.log(data)
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
 
