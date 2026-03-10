@@ -21,9 +21,7 @@ export const POST = async (req: NextRequest) => {
 
     let imageUrl;
 
-    console.log(file);
     if (file) {
-      console.log("hello name", file)
       imageUrl = await uploadImage(file);
     }
     const user = await User.findByIdAndUpdate(session.user.id, {
@@ -41,7 +39,6 @@ export const POST = async (req: NextRequest) => {
       { status: 200 }
     )
   } catch (error) {
-    console.log(error)
     return NextResponse.json(
       { message: "server error" },
       { status: 500 }

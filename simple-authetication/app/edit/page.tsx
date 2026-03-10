@@ -52,7 +52,6 @@ const Page = () => {
 
       const res = await axios.post("/api/edit", formData);
 
-      console.log("Updated:", res.data);
       data?.setUser(res.data)
       setLoading(false)
       router.push("/")

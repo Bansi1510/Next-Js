@@ -14,7 +14,6 @@ const Login = () => {
   });
   const router = useRouter();
   const session = useSession();
-  console.log(session?.data?.user);
   const handleOnChanged = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
       ...formData,
@@ -25,7 +24,6 @@ const Login = () => {
     e.preventDefault();
     try {
       const res = await signIn('credentials', { email: formData.email, password: formData.password, redirect: false });
-      console.log(res)
       router.push("/")
     } catch (error) {
       console.log(error)

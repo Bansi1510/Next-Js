@@ -29,7 +29,6 @@ const UserContext = ({ children }: Props) => {
     const fetchdData = async () => {
       try {
         const res = await axios.get("/api/user")
-        console.log("data from ", res)
         setUser(res.data.user)
       }
       catch (error) {
