@@ -1,18 +1,19 @@
 "use client";
 
+import { userContextData } from "@/context/UserContext";
 import axios from "axios";
-import { useSession } from "next-auth/react";
 import Image from "next/image";
-import React, { useEffect, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
+import React, { useContext, useEffect, useRef, useState } from "react";
 
 const Page = () => {
-  const { data } = useSession();
-
+  const data = useContext(userContextData)
   const fileInputRef = useRef<HTMLInputElement>(null);
-
+  const [loading, setLoading] = useState(false)
   const [name, setName] = useState("");
   const [image, setImage] = useState("");
   const [file, setFile] = useState<File | null>(null);
+  const router = useRouter();
   useEffect(() => {
     const fetchData = async () => {
       if (data?.user) {
@@ -40,6 +41,7 @@ const Page = () => {
 
   const handleUpdate = async () => {
     try {
+      setLoading(true)
       const formData = new FormData();
 
       formData.append("name", name);
@@ -51,8 +53,12 @@ const Page = () => {
       const res = await axios.post("/api/edit", formData);
 
       console.log("Updated:", res.data);
+      data?.setUser(res.data)
+      setLoading(false)
+      router.push("/")
     } catch (error) {
       console.log(error);
+      setLoading(false)
     }
   };
 
@@ -106,7 +112,7 @@ const Page = () => {
             onClick={handleUpdate}
             className="mt-6 w-full bg-blue-500 hover:bg-blue-600 text-white font-medium py-3 rounded-lg transition duration-300"
           >
-            Update Profile
+            {loading ? "Updating" : "Update Profile"}
           </button>
         </div>
       ) : (
