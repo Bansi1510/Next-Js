@@ -23,10 +23,8 @@ const RegisterPage = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log(formData);
     try {
       const res = await axios.post("/api/auth/register", formData)
-      console.log(res)
       router.push("/login")
     } catch (error) {
       console.log(error)
